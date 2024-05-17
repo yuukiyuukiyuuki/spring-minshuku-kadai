@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.example.samuraitravel.entity.House;
 import com.example.samuraitravel.entity.Review;
 import com.example.samuraitravel.form.ReservationInputForm;
+import com.example.samuraitravel.repository.FavoriteRepository;
 import com.example.samuraitravel.repository.HouseRepository;
 import com.example.samuraitravel.repository.ReviewRepository;
 import com.example.samuraitravel.security.UserDetailsImpl;
@@ -83,7 +84,7 @@ public class HouseController {
 
 
 	@GetMapping("/{id}")
-	public String show(@PathVariable(name = "id") Integer id, Model model, @PageableDefault(page = 0, size = 6, sort = "id", direction = Direction.ASC) Pageable pageable, @AuthenticationPrincipal UserDetailsImpl userDetailsImpl) {
+	public String show(@PathVariable(name = "id") Integer id, FavoriteRepository favoriteRepository, Model model, @PageableDefault(page = 0, size = 6, sort = "id", direction = Direction.ASC) Pageable pageable, @AuthenticationPrincipal UserDetailsImpl userDetailsImpl) {
 		/*	    if (userDetailsImpl == null) {
 		    // ユーザーが未認証の場合の処理、例えばログインページへリダイレクト
 		    return "redirect:/login";

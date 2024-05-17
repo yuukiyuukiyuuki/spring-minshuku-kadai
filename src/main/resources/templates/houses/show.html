@@ -15,7 +15,6 @@
 	<div class="samuraitravel-wrapper">
 		<!-- ヘッダー -->
 		<div th:replace="~{fragment :: header}"></div>
-
 		<main>
 			<div class="container pt-4 pb-5 samuraitravel-container">
 				<div class="row justify-content-center">
@@ -27,7 +26,27 @@
 								<li class="breadcrumb-item active" aria-current="page">民宿詳細</li>
 							</ol>
 						</nav>
-
+						<!-- お気に入り -->
+						<div sec:authorize="isAuthenticated()">
+							<!-- お気に入り追加 -->
+							<div th:if="${favoriteExists != null ? !favoriteExists : true}"> 
+								<form id="favoriteAddForm" style="display: inline;" method="post"
+									th:action="@{/houses/__${house.getId()}__/create}">
+									<input type="hidden" name="houseId" th:value="${house.getId()}">
+									<input type="hidden" name="userId" th:value="${#authentication.principal.user.id}">
+									<button type="submit" class="btn btn-link">&#9825; お気に入り追加</button>
+								</form>
+							</div>
+							<!-- お気に入り解除 -->
+							<div th:if="${favoriteExists != null ? favoriteExists : false}"> 
+								<form id="favoriteRemoveForm" style="display: inline;" method="post"
+									th:action="@{/houses/__${house.getId()}__/delete}">
+									<input type="hidden" name="houseId" th:value="${house.getId()}">
+									<input type="hidden" name="userId" th:value="${#authentication.principal.user.id}">
+									<button type="submit" class="btn btn-link">&#9829; お気に入り解除</button>
+								</form>
+							</div>
+						</div>
 						<h1 class="mb-4 text-center" th:text="${house.getName()}"></h1>
 
 						<div th:if="${errorMessage}" class="alert alert-danger">
@@ -40,7 +59,6 @@
 							<img th:unless="${house.getImageName()}" th:src="@{/images/noImage.png}" class="w-100"
 								alt="NO IMAGE">
 						</div>
-
 						<div class="container">
 							<div class="row">
 								<div class="col-lg-8 container mb-4">
@@ -179,7 +197,7 @@
 															<h3 class="card-title mb-3"
 																th:text="${review.getUser().getName()}"></h3>
 															<div sec:authorize="isAuthenticated()">
-																
+
 																<a class="text-right"
 																	th:href="@{/houses/__${house.getId()}__/review/__${review.getId()}__/edit}">編集</a>
 																<a th:href="@{/houses/__${house.getId()}__/review/__${review.getId()}__/delete}"
